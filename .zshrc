@@ -12,7 +12,6 @@ fi
 
 plugins=(git svn npm knife meteor vagrant mvn z sdkman zsh-syntax-highlighting zsh-autosuggestions)
 
-source ~/.profile
 source $ZSH/oh-my-zsh.sh
 
 # Keybindings for cmd + delete and redo

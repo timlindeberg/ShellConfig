@@ -1,5 +1,5 @@
-VERSION="0.0.1"
-VERBOSE=true
+VERSION="0.0.2"
+VERBOSE=false
 
 GIT_URL="https://github.com/timlindeberg/ShellConfig.git"
 REPO_LOCATION="/tmp/ShellConfig"
@@ -12,15 +12,15 @@ MAGENTA='\033[0;35m'
 CLEAR='\033[0m'
 
 function loginfo() {
-	[ "$VERBOSE" = true ] && echo $1
+	[ "$VERBOSE" = true ] && echo "> $1"
 }
 
 function logsuccess() {	
-	echo $1
+	echo " ✓ $1"
 }
 
 function logerror() {
-	echo $1
+	echo " × $1"
 	exit 1
 }
 

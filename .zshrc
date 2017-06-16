@@ -1,4 +1,4 @@
-# Shell Config v0.0.1
+# Shell Config v0.0.2
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -24,11 +24,14 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=blue,bold'
 
+function chef-log() {
+	less /var/log/chef/client.log
+}
 
 # Show hidden files with cd
 compinit
 _comp_options+=(globdots)
 
-if [ -d "~/.zshrc-extra" ]; then
-  source "~/.zshrc-extra"
+if [ -f ~/.zshrc-extra ]; then
+  source ~/.zshrc-extra
 fi

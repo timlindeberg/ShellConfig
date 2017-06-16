@@ -105,5 +105,5 @@ install_zsh_plugin zsh-syntax-highlighting
 install_zsh_plugin zsh-autosuggestions
 deploy_zhsrc
 deploy_agnoster_theme
-
+rm -rf "$REPO_LOCATION" >/dev/null 2>&1
 echo "Shell setup finished"

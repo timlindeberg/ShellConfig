@@ -1,4 +1,4 @@
-# Shell Config v0.0.1
+# Shell Config v0.0.2
 #
 # agnoster's Theme - https://gist.github.com/3712874
 # A Powerline-inspired theme for ZSH

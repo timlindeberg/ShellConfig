@@ -56,7 +56,7 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
+    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
   fi
 }
 
@@ -176,7 +176,26 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%(4~|%-1~/…/%2~|%3~)'
+  prompt_segment "$(enviornment_color)" black '%(4~|%-1~/…/%2~|%3~)'
+}
+
+enviornment_color() {
+  HOST=`uname -n | sed -e "s/\.schibsted\.se$//" | sed -e "s/\.aftonbladet\.se$//"`
+  if [[ $HOST =~ svp- ]]; then
+    echo red # Prod
+  elif [[ $HOST =~ [[:digit:]]pr(\.|-) ]]; then
+    echo red
+  elif [[ $HOST =~ [[:digit:]]pr$ ]]; then
+    echo red
+  elif [[ $HOST =~ svs- ]]; then
+    echo green # Stage
+  elif [[ $HOST =~ [[:digit:]]sr(\.|-) ]]; then
+    echo green
+  elif [[ $HOST =~ [[:digit:]]sr$ ]]; then
+    echo green
+  else
+    echo blue # Normal host
+  fi
 }
 
 # Virtualenv: current working virtualenv

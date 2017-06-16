@@ -15,7 +15,7 @@ function sshops() {
 
 	echo $PASSWORD > tmp.txt
 
-	sshpass -f tmp.txt ssh "$OPS_ACC@$SERVER"
+	sshpass -f tmp.txt ssh "$OPS_ACC@$SERVER" -t zsh
   	cleanup
 }
 

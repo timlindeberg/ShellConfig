@@ -181,7 +181,9 @@ prompt_dir() {
 
 enviornment_color() {
   HOST=`uname -n | sed -e "s/\.schibsted\.se$//" | sed -e "s/\.aftonbladet\.se$//"`
-  if [[ $HOST =~ svp- ]]; then
+  if [[ $HOST =~ vagrant ]]; then
+    echo magenta
+  elif [[ $HOST =~ svp- ]]; then
     echo red # Prod
   elif [[ $HOST =~ [[:digit:]]pr(\.|-) ]]; then
     echo red
@@ -213,7 +215,7 @@ prompt_virtualenv() {
 prompt_status() {
   local symbols
   symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✖"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 

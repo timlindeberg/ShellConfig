@@ -19,11 +19,6 @@ bindkey "^U" backward-kill-line
 bindkey "^X\\x7f" backward-kill-line
 bindkey "^X^_" redo
 
-# Syntax highlighting
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
-ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=blue,bold'
-
 function chef-log() {
 	less /var/log/chef/client.log
 }

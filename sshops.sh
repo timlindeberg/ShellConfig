@@ -12,11 +12,31 @@ if ! command -v $PROGRAM >/dev/null 2>&1; then
 fi
 
 SERVER=$1
-read -s -p "Password: " PASSWORD
 
-python $DIR/sshops.py $SERVER $PASSWORD $DIR
+if [ -z "$SERVER" ]; then
+	echo "usage: sshops <server>"
+	exit 1
+fi
 
-echo $PASSWORD > tmp.txt
+MAX_TRIES=5
+TRIES=0
+while [ $TRIES -le $MAX_TRIES ]; do
+	read -s -p "Password:" PASSWORD
+	echo
+	echo $PASSWORD > tmp.txt
 
-sshpass -f tmp.txt ssh "$OPS_ACC@$SERVER" -t zsh
+	python3 /Users/timlin/git/ShellConfigDeployment/scd.py -f tmp.txt $SERVER
+	if [ "$?" -eq '5' ]; then
+		let TRIES=TRIES+1 
+		continue
+	fi
+
+	sshpass -f tmp.txt ssh "$OPS_ACC@$SERVER" -t zsh
+	if [ "$?" -eq '5' ]; then
+		let TRIES=TRIES+1 
+		continue
+	fi
+	break
+done
+
 cleanup

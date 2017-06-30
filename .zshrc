@@ -1,7 +1,7 @@
-# Shell Config v0.0.2
-
 # Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" 
+
+export ZSH="$DIR/.oh-my-zsh"
 
 ZSH_THEME="agnoster-modified"
 
@@ -24,9 +24,20 @@ function chef-log() {
 }
 
 # Show hidden files with cd
-compinit
 _comp_options+=(globdots)
 
-if [ -f ~/.zshrc-extra ]; then
-  source ~/.zshrc-extra
-fi
+
+# Changes to another user but uses zsh instead of the users default shell and
+# keeps this configuration.
+function zshsu () {
+	USER="$1"
+	if [[ -z $USER ]]; then
+		USER="root"
+	fi
+	sudo -u $USER ZDOTDIR="$DIR" zsh
+}
+
+alias tree="tree -C"
+
+[ -f $DIR/.LS_COLORS ] && source $DIR/.LS_COLORS
+[ -f $DIR/.zshrc-extra ] && source $DIR/.zshrc-extra

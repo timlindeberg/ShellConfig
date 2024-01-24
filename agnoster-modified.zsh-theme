@@ -53,21 +53,16 @@ prompt_end() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{red}%}.)$USER@%m"
+  if [[ ! -z "$HIDE_HOST" ]]; then
+    return
   fi
-}
 
-prompt_svn() {
-  local rev branch
-  if in_svn; then
-    rev=$(svn_get_rev_nr)
-    if [ `svn_dirty_choose_pwd 1 0` -eq 1 ]; then
-      prompt_segment yellow black
-    else
-      prompt_segment green black
-    fi
-    echo -n "$rev@"
+  if [[ "$USER" == "$DEFAULT_USER" ]]; then
+    prompt_segment black default "%m"
+  elif [[ "$USER" == "root" ]]; then
+    prompt_segment black default "%{%F{red}%}%m"
+  else
+    prompt_segment black default "%(!.%{%F{red}%}.)$USER@%m"
   fi
 }
 
@@ -114,85 +109,20 @@ prompt_git() {
   fi
 }
 
-prompt_bzr() {
-    (( $+commands[bzr] )) || return
-    if (bzr status >/dev/null 2>&1); then
-        status_mod=`bzr status | head -n1 | grep "modified" | wc -m`
-        status_all=`bzr status | head -n1 | wc -m`
-        revision=`bzr log | head -n2 | tail -n1 | sed 's/^revno: //'`
-        if [[ $status_mod -gt 0 ]] ; then
-            prompt_segment yellow black
-            echo -n "bzr@"$revision "✚ "
-        else
-            if [[ $status_all -gt 0 ]] ; then
-                prompt_segment yellow black
-                echo -n "bzr@"$revision
-
-            else
-                prompt_segment green black
-                echo -n "bzr@"$revision
-            fi
-        fi
-    fi
-}
-
-prompt_hg() {
-  (( $+commands[hg] )) || return
-  local rev status
-  if $(hg id >/dev/null 2>&1); then
-    if $(hg prompt >/dev/null 2>&1); then
-      if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
-        # if files are not added
-        prompt_segment red white
-        st='±'
-      elif [[ -n $(hg prompt "{status|modified}") ]]; then
-        # if any modification
-        prompt_segment yellow black
-        st='±'
-      else
-        # if working copy is clean
-        prompt_segment green black
-      fi
-      echo -n $(hg prompt "☿ {rev}@{branch}") $st
-    else
-      st=""
-      rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
-      branch=$(hg id -b 2>/dev/null)
-      if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
-        st='±'
-      elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
-        st='±'
-      else
-        prompt_segment green black
-      fi
-      echo -n "☿ $rev@$branch" $st
-    fi
-  fi
-}
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment "$(enviornment_color)" black '%(4~|%-1~/…/%2~|%3~)'
+  prompt_segment "$(enviornment_color)" black "%(4~|%-1~/…/%2~|%3~)"
 }
 
 enviornment_color() {
-  HOST=`uname -n | sed -e "s/\.schibsted\.se$//" | sed -e "s/\.aftonbladet\.se$//"`
+  HOST=`uname -n`
   if [[ $HOST =~ vagrant ]]; then
     echo magenta
-  elif [[ $HOST =~ svp- ]]; then
+  elif [[ $HOST =~ 'ip\-' ]]; then
     echo red # Prod
-  elif [[ $HOST =~ [[:digit:]]pr(\.|-) ]]; then
-    echo red
-  elif [[ $HOST =~ [[:digit:]]pr$ ]]; then
-    echo red
-  elif [[ $HOST =~ svs- ]]; then
+  elif [[ $HOST =~ '(svs\-)|([0-9](sr|sc))' ]]; then
     echo green # Stage
-  elif [[ $HOST =~ [[:digit:]]sr(\.|-) ]]; then
-    echo green
-  elif [[ $HOST =~ [[:digit:]]sr$ ]]; then
-    echo green
   else
     echo blue # Normal host
   fi
@@ -213,24 +143,30 @@ prompt_virtualenv() {
 prompt_status() {
   local symbols
   symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✖"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{red}%}\e[1m√\e[0m"
+  if [[ $RETVAL -eq 0 ]]; then
+  	symbols+="%{%F{green}%}✔"
+  else
+  	symbols+="%{%F{red}%}✖"
+  fi
+  [[ $UID -eq 0 ]] && symbols+="%{%F{red}%}%{\e[1m%}√%{\e[0m%}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment black default "$symbols "
+}
+
+prompt_time() {
+	prompt_segment black white "%T"	
 }
 
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
-  prompt_virtualenv
+  prompt_time
   prompt_context
+  prompt_virtualenv
   prompt_dir
   prompt_git
-  prompt_bzr
-  prompt_hg
-  prompt_svn
   prompt_end
 }
 

@@ -1,0 +1,38 @@
+[http]
+	postBuffer = 524288000
+[core]
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	whitespace = input
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[user]
+	name = Tim Lindeberg
+	email = tim.lindeberg@schibsted.se
+[diff]
+	tool = meld
+[difftool]
+	prompt = false
+[difftool "meld"]
+	trustExitCode = true
+	cmd = open -W -a Meld --args \"$LOCAL\" \"$PWD/$REMOTE\"
+[merge]
+	tool = meld
+[mergetool]
+	prompt = false
+[mergetool "meld"]
+	trustExitCode = true
+	cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
+[color]
+	ui = always
+[color "diff"]
+	meta = yellow bold
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = "red bold #b3001e"
+	newNormal = "green bold"
+	newHighlight = "green bold #56b814"

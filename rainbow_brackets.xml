@@ -1,0 +1,37 @@
+<application>
+  <component name="RainbowSettings">
+    <option name="darkRoundBracketsColors">
+      <array>
+        <option value="0x89DDFF" />
+        <option value="0xd3eeaa" />
+        <option value="0x99b9ff" />
+        <option value="0xffdb99" />
+        <option value="0xff99aa" />
+        <option value="0xd3a9ef" />
+      </array>
+    </option>
+    <option name="darkSquareBracketsColors">
+      <array>
+        <option value="0x89DDFF" />
+        <option value="0xd3eeaa" />
+        <option value="0x99b9ff" />
+        <option value="0xffdb99" />
+        <option value="0xff99aa" />
+        <option value="0xd3a9ef" />
+      </array>
+    </option>
+    <option name="darkSquigglyBracketsColors">
+      <array>
+        <option value="0x89DDFF" />
+        <option value="0xd3eeaa" />
+        <option value="0x99b9ff" />
+        <option value="0xffdb99" />
+        <option value="0xff99aa" />
+        <option value="0xd3a9ef" />
+      </array>
+    </option>
+    <option name="doNOTRainbowifyBracketsWithoutContent" value="true" />
+    <option name="rainbowifyHTMLInsideJS" value="true" />
+    <option name="version" value="5.7.1" />
+  </component>
+</application>

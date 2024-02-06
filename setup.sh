@@ -107,9 +107,9 @@ function install_nvm_and_sdkman() {
 }
 
 function create_icloud_symlink() {
-	echo "Creating iCloud symlink"
+	echo "Creating iCloud symlink: $ICLOUD_DIR"
 
-	ln -s $ICLOUD_DIR ~/iCloud
+	ln -s "$ICLOUD_DIR" "$HOME/iCloud"
 }
 
 function install_oh_my_zsh() {
@@ -133,7 +133,7 @@ function install_oh_my_zsh() {
 function copy_plist_files() {
 	echo "Copying plist files"
 
-	cp -R "$CONFIG_DIR/plists" "$HOME/Library/Preferences"
+	cp -a "$CONFIG_DIR/plists/." "$HOME/Library/Preferences/"
 }
 
 function setup_git_config() {

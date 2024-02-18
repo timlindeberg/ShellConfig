@@ -90,6 +90,7 @@ function install_cli_tools() {
 		"jq"
 		"tre-command"
 		"grc"
+		"git-delta"
 	)
 
 	for TOOL in ${TOOLS[@]}; do
@@ -139,24 +140,27 @@ function copy_plist_files() {
 function setup_git_config() {
 	echo "Setting up git config"
 
-	git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
-	git config --global interactive.diffFilter "diff-so-fancy --patch"
+	git config --global core.pager "delta"
+	git config --global interactive.diffFilter "delta --color-only"
 	git config --global color.ui true
 
-	git config --global color.diff-highlight.oldNormal    "red bold"
-	git config --global color.diff-highlight.oldHighlight "red bold 52"
-	git config --global color.diff-highlight.newNormal    "green bold"
-	git config --global color.diff-highlight.newHighlight "green bold 22"
+	git config --global delta.navigate true
+	git config --global delta.side-by-side true
+	git config --global delta.line-numbers true
+	git config --global delta.minus-style "syntax #96353c"
+	git config --global delta.minus-emph-style "syntax #5c1f24"
+	git config --global delta.plus-style "syntax #659c60"
+	git config --global delta.plus-emph-style "syntax #3b5e38"
 
-	git config --global color.diff.meta       "11"
-	git config --global color.diff.frag       "magenta bold"
-	git config --global color.diff.func       "146 bold"
-	git config --global color.diff.commit     "yellow bold"
-	git config --global color.diff.old        "red bold"
-	git config --global color.diff.new        "green bold"
-	git config --global color.diff.whitespace "red reverse"
+	git config --global diff.colorMoved default
+	git config --global merge.conflictstyle diff3
 
 	git config --global alias.pushfwl "push --force-with-lease"
+
+	git config --global rerere.enabled true
+	git config --global merge.conflictstyle zdiff3
+	git config --global pull.rebase true
+	git config --global push.autosetupremote true
 
 	git config --global user.name "Tim Lindeberg"
 	git config --global user.email "$EMAIL"
